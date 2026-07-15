@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Product {
     private Long id;
-    private Long categoryId;
+    private final Long categoryId;
     private String name;
     private String sku;
     private BigDecimal costPrice;
@@ -13,7 +13,7 @@ public class Product {
 
     // CONSTRUCTOR: El guardián de la integridad
     public Product(Long id, Long categoryId  ,String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
-        validate(name, sku, costPrice, salePrice, currentStock);
+        validate(name, sku, costPrice, salePrice, currentStock, categoryId);
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
@@ -23,12 +23,14 @@ public class Product {
         this.currentStock = currentStock;
     }
 
-    private void validate(String name, String sku, BigDecimal cost, BigDecimal sale, Integer stock) {
+    private void validate(String name, String sku, BigDecimal cost, BigDecimal sale, Integer stock, Long categoryId) {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio");
         if (sku == null || sku.isBlank()) throw new IllegalArgumentException("El SKU es obligatorio");
         if (cost == null || cost.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("El costo debe ser mayor a 0");
         if (sale == null || sale.compareTo(cost) < 0) throw new IllegalArgumentException("El precio de venta no puede ser menor al costo");
         if (stock == null || stock < 0) throw new IllegalArgumentException("El stock no puede ser negativo");
+        if (categoryId == null) throw new IllegalArgumentException("La categoría es obligatoria");
+        // ...
     }
 
     // AHORA: Los Setters no son simples, deben validar también.

@@ -11,7 +11,7 @@ public class Category {
     }
 
     private void validate(String value)  {
-        if (name == null || name.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio");
+        if (value == null || value.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio");
     }
     public Long getId() {
         return id;
