@@ -1,5 +1,7 @@
 package com.example.demo.domain.model;
 
+import com.example.demo.domain.exception.BusinessException;
+
 import java.math.BigDecimal;
 
 public class Product {
@@ -10,10 +12,11 @@ public class Product {
     private BigDecimal costPrice;
     private BigDecimal salePrice;
     private Integer currentStock;
-
+    private boolean active;
     // CONSTRUCTOR: El guardián de la integridad
-    public Product(Long id, Long categoryId  ,String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
+    public Product(Long id, Long categoryId  ,String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock, boolean active) {
         validate(name, sku, costPrice, salePrice, currentStock, categoryId);
+
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
@@ -21,6 +24,7 @@ public class Product {
         this.costPrice = costPrice;
         this.salePrice = salePrice;
         this.currentStock = currentStock;
+        this.active = active;
     }
 
     private void validate(String name, String sku, BigDecimal cost, BigDecimal sale, Integer stock, Long categoryId) {
@@ -30,6 +34,7 @@ public class Product {
         if (sale == null || sale.compareTo(cost) < 0) throw new IllegalArgumentException("El precio de venta no puede ser menor al costo");
         if (stock == null || stock < 0) throw new IllegalArgumentException("El stock no puede ser negativo");
         if (categoryId == null) throw new IllegalArgumentException("La categoría es obligatoria");
+
         // ...
     }
 
@@ -63,5 +68,37 @@ public class Product {
     public Integer getCurrentStock() {
         return currentStock;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+    public void deactivate() {
+        if (!this.active) {
+            throw new BusinessException("El producto ya está desactivado");
+        }
+        this.active = false;
+    }
+    public void rename(String name) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio");
+        this.name = name;
+    }
+
+    public void changeSku(String sku) {
+        if (sku == null || sku.isBlank()) throw new IllegalArgumentException("El SKU es obligatorio");
+        this.sku = sku;
+    }
+
+    public void updatePrice(BigDecimal newCost, BigDecimal newSale) {
+        if (newCost.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("El costo debe ser mayor a 0");
+        if (newSale.compareTo(newCost) < 0) throw new IllegalArgumentException("El precio de venta no puede ser menor al costo");
+        this.costPrice = newCost;
+        this.salePrice = newSale;
+    }
+
+    public void updateStock(Integer stock) {
+        if (stock == null || stock < 0) throw new IllegalArgumentException("El stock no puede ser negativo");
+        this.currentStock = stock;
+    }
+
     // Getters... (Sin setters para los campos críticos si no queremos permitir cambios)
 }

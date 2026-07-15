@@ -18,4 +18,5 @@ public class ProductEntity {
     private BigDecimal costPrice;
     private BigDecimal salePrice;
     private Integer currentStock;
+    private  boolean active;
 }

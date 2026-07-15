@@ -16,6 +16,7 @@ public class ProductMapper {
         entity.setCostPrice(product.getCostPrice());
         entity.setSalePrice(product.getSalePrice());
         entity.setCurrentStock(product.getCurrentStock());
+        entity.setActive(product.isActive());
         return entity;
     }
 
@@ -28,7 +29,8 @@ public class ProductMapper {
                 entity.getSku(),
                 entity.getCostPrice(),
                 entity.getSalePrice(),
-                entity.getCurrentStock()
+                entity.getCurrentStock(),
+                entity.isActive()
         );
     }
 }

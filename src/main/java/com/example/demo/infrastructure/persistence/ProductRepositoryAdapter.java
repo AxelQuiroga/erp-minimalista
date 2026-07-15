@@ -4,7 +4,9 @@ import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductRepositoryAdapter implements ProductRepositoryPort {
@@ -35,5 +37,12 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
     @Override
     public boolean existsBySku(String sku){
         return repository.existsBySku(sku);
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
     }
 }
