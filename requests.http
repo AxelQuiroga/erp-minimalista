@@ -1,0 +1,75 @@
+### ==========================================
+### CATEGORY ENDPOINTS
+### ==========================================
+
+### Crear Categoría
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "Electrónica"
+}
+
+### Crear otra Categoría
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "Hogar"
+}
+
+### ==========================================
+### PRODUCT ENDPOINTS
+### ==========================================
+
+### Crear Producto (requiere categoryId existente, ej: 1)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "Teclado Mecánico",
+  "sku": "TEC-MEC-001",
+  "costPrice": 50.00,
+  "salePrice": 120.00,
+  "currentStock": 10
+}
+
+### Crear Producto - SKU Duplicado (debe fallar 409)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "Mouse Gamer",
+  "sku": "TEC-MEC-001",
+  "costPrice": 20.00,
+  "salePrice": 60.00,
+  "currentStock": 50
+}
+
+### Crear Producto - Categoría inexistente (debe fallar 409)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 999,
+  "name": "Monitor 4K",
+  "sku": "MON-4K-001",
+  "costPrice": 300.00,
+  "salePrice": 600.00,
+  "currentStock": 5
+}
+
+### Crear Producto - Datos inválidos (debe fallar 400)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "",
+  "sku": "",
+  "costPrice": -10,
+  "salePrice": 5,
+  "currentStock": -1
+}

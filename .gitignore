@@ -36,6 +36,12 @@ out/
 ### VS Code ###
 .vscode/
 
-# Secrets (esto es vital, nunca subas contraseñas)
+### Logs ###
+*.log
+*.err
+bootrun*
+
+### Secrets ###
 application-local.properties
+application-dev.properties
 .env

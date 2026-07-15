@@ -36,4 +36,9 @@ public class CategoryRepositoryAdapter implements CategoryRepositoryPort {
     public boolean existsById(Long id) {
         return repository.existsById(id);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
+    }
 }
