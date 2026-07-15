@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Getter @Setter
-public class ProductRequestDTO {
+public class ProductUpdateDTO {
 
     @NotNull(message = "La categoría es obligatoria")
     private Long categoryId;
@@ -35,16 +35,4 @@ public class ProductRequestDTO {
     private Integer currentStock;
 
 
-    public Product toDomain() {
-        return new Product(
-                null,               // id → null para creación (autogenerado)
-                this.categoryId,
-                this.name,
-                this.sku,
-                this.costPrice,
-                this.salePrice,
-                this.currentStock,
-                true
-        );
     }
-}

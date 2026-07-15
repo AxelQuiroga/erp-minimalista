@@ -4,40 +4,35 @@ import com.example.demo.domain.exception.BusinessException;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import com.example.demo.domain.repository.ProductRepositoryPort;
+import com.example.demo.infrastructure.web.ProductUpdateDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class UpdateProductUseCase {
-    private final ProductRepositoryPort productRepository;
-    private final CategoryRepositoryPort categoryRepository;
 
-    public UpdateProductUseCase(ProductRepositoryPort productRepository,
-                                CategoryRepositoryPort categoryRepository) {
+    private final ProductRepositoryPort productRepository;
+
+    public UpdateProductUseCase(ProductRepositoryPort productRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
     }
 
-    public Product execute(Long id, Product updatedData) {
+    public Product execute(Long id, ProductUpdateDTO dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Producto no encontrado"));
 
-        // Validar SKU único (excepto para sí mismo)
-        if (!product.getSku().equals(updatedData.getSku())
-                && productRepository.existsBySku(updatedData.getSku())) {
-            throw new BusinessException("SKU duplicado");
+        // Validar SKU único (excluyendo el producto actual)
+        if (!product.getSku().equals(dto.getSku())
+                && productRepository.existsBySku(dto.getSku())) {
+            throw new BusinessException("SKU duplicado: " + dto.getSku());
         }
 
-        // Validar categoría existente
-        if (!categoryRepository.existsById(updatedData.getCategoryId())) {
-            throw new BusinessException("Categoría no encontrada");
-        }
-
-        product.rename(updatedData.getName());
-        product.changeSku(updatedData.getSku());
-        product.updatePrice(updatedData.getCostPrice(), updatedData.getSalePrice());
-        product.updateStock(updatedData.getCurrentStock());
+        // Aplicar cambios usando los métodos semánticos del dominio
+        product.rename(dto.getName());
+        product.changeSku(dto.getSku());
+        product.updatePrice(dto.getCostPrice(), dto.getSalePrice());
+        product.updateStock(dto.getCurrentStock());
 
         return productRepository.save(product);
     }

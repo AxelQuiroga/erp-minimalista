@@ -2,7 +2,7 @@
 ### CATEGORY ENDPOINTS
 ### ==========================================
 
-### Crear Categoría
+### Crear Categoría 1
 POST http://localhost:8080/api/categories
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
   "name": "Electrónica"
 }
 
-### Crear otra Categoría
+### Crear Categoría 2
 POST http://localhost:8080/api/categories
 Content-Type: application/json
 
@@ -22,7 +22,9 @@ Content-Type: application/json
 ### PRODUCT ENDPOINTS
 ### ==========================================
 
-### Crear Producto (requiere categoryId existente, ej: 1)
+### --- CREAR ---
+
+### Crear Producto OK (requiere categoryId 1)
 POST http://localhost:8080/api/products
 Content-Type: application/json
 
@@ -35,20 +37,35 @@ Content-Type: application/json
   "currentStock": 10
 }
 
-### Crear Producto - SKU Duplicado (debe fallar 409)
+### Crear Producto 2
 POST http://localhost:8080/api/products
 Content-Type: application/json
 
 {
   "categoryId": 1,
   "name": "Mouse Gamer",
-  "sku": "TEC-MEC-001",
+  "sku": "MOUSE-GAMER-001",
   "costPrice": 20.00,
   "salePrice": 60.00,
   "currentStock": 50
 }
 
-### Crear Producto - Categoría inexistente (debe fallar 409)
+### --- CASOS DE ERROR (CREAR) ---
+
+### SKU Duplicado (debe fallar 409)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "Otro Teclado",
+  "sku": "TEC-MEC-001",
+  "costPrice": 30.00,
+  "salePrice": 80.00,
+  "currentStock": 5
+}
+
+### Categoría inexistente (debe fallar 409)
 POST http://localhost:8080/api/products
 Content-Type: application/json
 
@@ -61,7 +78,7 @@ Content-Type: application/json
   "currentStock": 5
 }
 
-### Crear Producto - Datos inválidos (debe fallar 400)
+### Datos inválidos (debe fallar 400)
 POST http://localhost:8080/api/products
 Content-Type: application/json
 
@@ -73,3 +90,35 @@ Content-Type: application/json
   "salePrice": 5,
   "currentStock": -1
 }
+
+### --- LISTAR ---
+
+### Listar todos los productos
+GET http://localhost:8080/api/products
+
+### --- OBTENER POR ID ---
+
+### Obtener producto ID 1 (cambiar ID según respuesta del POST)
+GET http://localhost:8080/api/products/1
+
+### --- ACTUALIZAR ---
+
+### Actualizar producto ID 1 (sin categoryId porque no se cambia)
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Teclado Mecánico RGB",
+  "sku": "TEC-RGB-001",
+  "costPrice": 55.00,
+  "salePrice": 150.00,
+  "currentStock": 20
+}
+
+### --- DESACTIVAR ---
+
+### Desactivar producto ID 1 (borrado lógico, debe devolver 204)
+DELETE http://localhost:8080/api/products/1
+
+### Desactivar producto ya desactivado (debe fallar 409)
+DELETE http://localhost:8080/api/products/1
