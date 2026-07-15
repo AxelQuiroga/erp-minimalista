@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class Product {
     private Long id;
+    private Long categoryId;
     private String name;
     private String sku;
     private BigDecimal costPrice;
@@ -11,9 +12,10 @@ public class Product {
     private Integer currentStock;
 
     // CONSTRUCTOR: El guardián de la integridad
-    public Product(Long id, String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
+    public Product(Long id, Long categoryId  ,String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
         validate(name, sku, costPrice, salePrice, currentStock);
         this.id = id;
+        this.categoryId = categoryId;
         this.name = name;
         this.sku = sku;
         this.costPrice = costPrice;
@@ -37,6 +39,10 @@ public class Product {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public String getName() {
