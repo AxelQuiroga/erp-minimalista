@@ -4,7 +4,9 @@ import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class CategoryRepositoryAdapter implements CategoryRepositoryPort {
@@ -40,5 +42,12 @@ public class CategoryRepositoryAdapter implements CategoryRepositoryPort {
     @Override
     public boolean existsByName(String name) {
         return repository.existsByName(name);
+    }
+
+    @Override
+    public List<Category> findAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

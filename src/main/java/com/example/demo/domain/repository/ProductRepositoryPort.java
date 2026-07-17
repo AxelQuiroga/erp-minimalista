@@ -9,5 +9,6 @@ public interface ProductRepositoryPort {
     Product save(Product product);
     Optional<Product> findById(Long id);
     boolean existsBySku(String sku);
+    boolean hasActiveProductsByCategory(Long categoryId);
     List<Product> findAll();
 }

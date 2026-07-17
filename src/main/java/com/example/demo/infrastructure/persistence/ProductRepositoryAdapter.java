@@ -40,6 +40,11 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveProductsByCategory(Long categoryId) {
+        return repository.existsByCategoryIdAndActiveTrue(categoryId);
+    }
+
+    @Override
     public List<Product> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDomain)

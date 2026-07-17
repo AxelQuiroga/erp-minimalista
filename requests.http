@@ -18,13 +18,31 @@ Content-Type: application/json
   "name": "Hogar"
 }
 
+### Listar todas las categorías
+GET http://localhost:8080/api/categories
+
+### Obtener categoría ID 1
+GET http://localhost:8080/api/categories/1
+
+### Actualizar categoría ID 1
+PUT http://localhost:8080/api/categories/1
+Content-Type: application/json
+
+{
+  "name": "Electrónica y Computación"
+}
+
+### Desactivar categoría ID 2 (debe devolver 204)
+DELETE http://localhost:8080/api/categories/2
+
+### Desactivar categoría ya desactivada (debe fallar 409)
+DELETE http://localhost:8080/api/categories/2
+
 ### ==========================================
 ### PRODUCT ENDPOINTS
 ### ==========================================
 
-### --- CREAR ---
-
-### Crear Producto OK (requiere categoryId 1)
+### Crear Producto OK (requiere categoryId activo)
 POST http://localhost:8080/api/products
 Content-Type: application/json
 
@@ -50,60 +68,13 @@ Content-Type: application/json
   "currentStock": 50
 }
 
-### --- CASOS DE ERROR (CREAR) ---
-
-### SKU Duplicado (debe fallar 409)
-POST http://localhost:8080/api/products
-Content-Type: application/json
-
-{
-  "categoryId": 1,
-  "name": "Otro Teclado",
-  "sku": "TEC-MEC-001",
-  "costPrice": 30.00,
-  "salePrice": 80.00,
-  "currentStock": 5
-}
-
-### Categoría inexistente (debe fallar 409)
-POST http://localhost:8080/api/products
-Content-Type: application/json
-
-{
-  "categoryId": 999,
-  "name": "Monitor 4K",
-  "sku": "MON-4K-001",
-  "costPrice": 300.00,
-  "salePrice": 600.00,
-  "currentStock": 5
-}
-
-### Datos inválidos (debe fallar 400)
-POST http://localhost:8080/api/products
-Content-Type: application/json
-
-{
-  "categoryId": 1,
-  "name": "",
-  "sku": "",
-  "costPrice": -10,
-  "salePrice": 5,
-  "currentStock": -1
-}
-
-### --- LISTAR ---
-
 ### Listar todos los productos
 GET http://localhost:8080/api/products
 
-### --- OBTENER POR ID ---
-
-### Obtener producto ID 1 (cambiar ID según respuesta del POST)
+### Obtener producto ID 1
 GET http://localhost:8080/api/products/1
 
-### --- ACTUALIZAR ---
-
-### Actualizar producto ID 1 (sin categoryId porque no se cambia)
+### Actualizar producto ID 1
 PUT http://localhost:8080/api/products/1
 Content-Type: application/json
 
@@ -115,9 +86,7 @@ Content-Type: application/json
   "currentStock": 20
 }
 
-### --- DESACTIVAR ---
-
-### Desactivar producto ID 1 (borrado lógico, debe devolver 204)
+### Desactivar producto ID 1
 DELETE http://localhost:8080/api/products/1
 
 ### Desactivar producto ya desactivado (debe fallar 409)
