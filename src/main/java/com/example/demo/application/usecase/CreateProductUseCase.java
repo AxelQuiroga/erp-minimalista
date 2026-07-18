@@ -1,15 +1,18 @@
 package com.example.demo.application.usecase;
 
+import com.example.demo.application.port.in.CreateProductPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.model.Category;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import com.example.demo.domain.repository.ProductRepositoryPort;
-import com.example.demo.domain.service.ProductServicePort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
-public class CreateProductUseCase implements ProductServicePort {
+public class CreateProductUseCase implements CreateProductPort {
 
     private final ProductRepositoryPort productRepository;
     private final CategoryRepositoryPort categoryRepository;
@@ -20,14 +23,11 @@ public class CreateProductUseCase implements ProductServicePort {
     }
 
     @Override
-    @Transactional // Importante: la transacción vive en el caso de uso
+    @Transactional
     public Product createProduct(Product product) {
-        // 1. Reglas de negocio que cruzan fronteras (DB)
         validateSkuUnique(product.getSku());
-        validateCategoryExists(product.getCategoryId());
+        validateCategoryActive(product.getCategoryId());
 
-        // 2. El dominio ya se validó a sí mismo al instanciarse (invariantes)
-        // 3. Guardamos
         return productRepository.save(product);
     }
 
@@ -37,9 +37,13 @@ public class CreateProductUseCase implements ProductServicePort {
         }
     }
 
-    private void validateCategoryExists(Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
+    private void validateCategoryActive(Long categoryId) {
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isEmpty()) {
             throw new BusinessException("Categoría no encontrada: " + categoryId);
+        }
+        if (!category.get().isActive()) {
+            throw new BusinessException("La categoría '" + category.get().getName() + "' está desactivada");
         }
     }
 }

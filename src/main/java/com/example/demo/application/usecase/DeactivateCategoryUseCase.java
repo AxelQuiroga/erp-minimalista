@@ -1,5 +1,6 @@
 package com.example.demo.application.usecase;
 
+import com.example.demo.application.port.in.DeactivateCategoryPort;
 import com.example.demo.domain.exception.BusinessException;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class DeactivateCategoryUseCase {
+public class DeactivateCategoryUseCase implements DeactivateCategoryPort {
 
     private final CategoryRepositoryPort categoryRepository;
     private final ProductRepositoryPort productRepository;

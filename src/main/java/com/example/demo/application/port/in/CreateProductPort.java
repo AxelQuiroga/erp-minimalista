@@ -1,7 +1,7 @@
-package com.example.demo.domain.service;
+package com.example.demo.application.port.in;
 
 import com.example.demo.domain.model.Product;
 
-public interface ProductServicePort {
+public interface CreateProductPort {
     Product createProduct(Product product);
 }

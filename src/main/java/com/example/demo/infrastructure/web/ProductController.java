@@ -1,6 +1,10 @@
 package com.example.demo.infrastructure.web;
 
-import com.example.demo.application.usecase.*;
+import com.example.demo.application.port.in.CreateProductPort;
+import com.example.demo.application.port.in.DeactivateProductPort;
+import com.example.demo.application.port.in.GetProductPort;
+import com.example.demo.application.port.in.ListProductsPort;
+import com.example.demo.application.port.in.UpdateProductPort;
 import com.example.demo.domain.model.Product;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,51 +17,54 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final CreateProductUseCase createProductUseCase;
-    private final GetProductUseCase getProductUseCase;
-    private final ListProductsUseCase listProductsUseCase;
-    private final UpdateProductUseCase updateProductUseCase;
-    private final DeactivateProductUseCase deactivateProductUseCase;
+    private final CreateProductPort createProductPort;
+    private final GetProductPort getProductPort;
+    private final ListProductsPort listProductsPort;
+    private final UpdateProductPort updateProductPort;
+    private final DeactivateProductPort deactivateProductPort;
 
-    public ProductController(CreateProductUseCase createProductUseCase,
-                             GetProductUseCase getProductUseCase,
-                             ListProductsUseCase listProductsUseCase,
-                             UpdateProductUseCase updateProductUseCase,
-                             DeactivateProductUseCase deactivateProductUseCase) {
-        this.createProductUseCase = createProductUseCase;
-        this.getProductUseCase = getProductUseCase;
-        this.listProductsUseCase = listProductsUseCase;
-        this.updateProductUseCase = updateProductUseCase;
-        this.deactivateProductUseCase = deactivateProductUseCase;
+    public ProductController(CreateProductPort createProductPort,
+                             GetProductPort getProductPort,
+                             ListProductsPort listProductsPort,
+                             UpdateProductPort updateProductPort,
+                             DeactivateProductPort deactivateProductPort) {
+        this.createProductPort = createProductPort;
+        this.getProductPort = getProductPort;
+        this.listProductsPort = listProductsPort;
+        this.updateProductPort = updateProductPort;
+        this.deactivateProductPort = deactivateProductPort;
     }
 
     @PostMapping
     public ResponseEntity<Product> create(@Valid @RequestBody ProductRequestDTO dto) {
         Product product = dto.toDomain();
-        Product created = createProductUseCase.createProduct(product);
+        Product created = createProductPort.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
     public ResponseEntity<List<Product>> getAll() {
-        return ResponseEntity.ok(listProductsUseCase.execute());
+        return ResponseEntity.ok(listProductsPort.execute());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(getProductUseCase.execute(id));
+        return ResponseEntity.ok(getProductPort.execute(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable Long id,
                                           @Valid @RequestBody ProductUpdateDTO dto) {
-        Product updated = updateProductUseCase.execute(id, dto);
+        Product updated = updateProductPort.execute(
+                id, dto.getName(), dto.getSku(), dto.getCostPrice(),
+                dto.getSalePrice(), dto.getCurrentStock()
+        );
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
-        deactivateProductUseCase.execute(id);
+        deactivateProductPort.execute(id);
         return ResponseEntity.noContent().build();
     }
 }

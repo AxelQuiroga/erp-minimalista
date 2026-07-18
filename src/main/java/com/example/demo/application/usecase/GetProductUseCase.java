@@ -1,12 +1,13 @@
 package com.example.demo.application.usecase;
 
+import com.example.demo.application.port.in.GetProductPort;
 import com.example.demo.domain.exception.BusinessException;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetProductUseCase {
+public class GetProductUseCase implements GetProductPort {
     private final ProductRepositoryPort productRepository;
 
     public GetProductUseCase(ProductRepositoryPort productRepository) {

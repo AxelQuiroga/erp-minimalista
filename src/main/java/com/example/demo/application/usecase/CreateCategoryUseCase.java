@@ -1,13 +1,13 @@
 package com.example.demo.application.usecase;
 
+import com.example.demo.application.port.in.CreateCategoryPort;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
-import com.example.demo.domain.service.CategoryServicePort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CreateCategoryUseCase implements CategoryServicePort {
+public class CreateCategoryUseCase implements CreateCategoryPort {
 
     private final CategoryRepositoryPort categoryRepository;
     public CreateCategoryUseCase(CategoryRepositoryPort categoryRepository) {

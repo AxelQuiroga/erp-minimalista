@@ -1,12 +1,13 @@
 package com.example.demo.application.usecase;
 
+import com.example.demo.application.port.in.GetCategoryPort;
 import com.example.demo.domain.exception.BusinessException;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetCategoryUseCase {
+public class GetCategoryUseCase implements GetCategoryPort {
 
     private final CategoryRepositoryPort categoryRepository;
 

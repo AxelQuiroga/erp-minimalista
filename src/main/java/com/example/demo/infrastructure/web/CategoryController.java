@@ -1,6 +1,10 @@
 package com.example.demo.infrastructure.web;
 
-import com.example.demo.application.usecase.*;
+import com.example.demo.application.port.in.CreateCategoryPort;
+import com.example.demo.application.port.in.DeactivateCategoryPort;
+import com.example.demo.application.port.in.GetCategoryPort;
+import com.example.demo.application.port.in.ListCategoriesPort;
+import com.example.demo.application.port.in.UpdateCategoryPort;
 import com.example.demo.domain.model.Category;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,51 +17,51 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CreateCategoryUseCase createCategoryUseCase;
-    private final GetCategoryUseCase getCategoryUseCase;
-    private final ListCategoriesUseCase listCategoriesUseCase;
-    private final UpdateCategoryUseCase updateCategoryUseCase;
-    private final DeactivateCategoryUseCase deactivateCategoryUseCase;
+    private final CreateCategoryPort createCategoryPort;
+    private final GetCategoryPort getCategoryPort;
+    private final ListCategoriesPort listCategoriesPort;
+    private final UpdateCategoryPort updateCategoryPort;
+    private final DeactivateCategoryPort deactivateCategoryPort;
 
-    public CategoryController(CreateCategoryUseCase createCategoryUseCase,
-                               GetCategoryUseCase getCategoryUseCase,
-                               ListCategoriesUseCase listCategoriesUseCase,
-                               UpdateCategoryUseCase updateCategoryUseCase,
-                               DeactivateCategoryUseCase deactivateCategoryUseCase) {
-        this.createCategoryUseCase = createCategoryUseCase;
-        this.getCategoryUseCase = getCategoryUseCase;
-        this.listCategoriesUseCase = listCategoriesUseCase;
-        this.updateCategoryUseCase = updateCategoryUseCase;
-        this.deactivateCategoryUseCase = deactivateCategoryUseCase;
+    public CategoryController(CreateCategoryPort createCategoryPort,
+                               GetCategoryPort getCategoryPort,
+                               ListCategoriesPort listCategoriesPort,
+                               UpdateCategoryPort updateCategoryPort,
+                               DeactivateCategoryPort deactivateCategoryPort) {
+        this.createCategoryPort = createCategoryPort;
+        this.getCategoryPort = getCategoryPort;
+        this.listCategoriesPort = listCategoriesPort;
+        this.updateCategoryPort = updateCategoryPort;
+        this.deactivateCategoryPort = deactivateCategoryPort;
     }
 
     @PostMapping
     public ResponseEntity<Category> create(@Valid @RequestBody CategoryRequestDTO request) {
         Category category = new Category(null, request.name(), true);
-        Category saved = createCategoryUseCase.createCategory(category);
+        Category saved = createCategoryPort.createCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @GetMapping
     public ResponseEntity<List<Category>> getAll() {
-        return ResponseEntity.ok(listCategoriesUseCase.execute());
+        return ResponseEntity.ok(listCategoriesPort.execute());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(getCategoryUseCase.execute(id));
+        return ResponseEntity.ok(getCategoryPort.execute(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> update(@PathVariable Long id,
                                            @Valid @RequestBody CategoryUpdateDTO dto) {
-        Category updated = updateCategoryUseCase.execute(id, dto);
+        Category updated = updateCategoryPort.execute(id, dto.getName());
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
-        deactivateCategoryUseCase.execute(id);
+        deactivateCategoryPort.execute(id);
         return ResponseEntity.noContent().build();
     }
 }
