@@ -100,5 +100,18 @@ public class Product {
         this.currentStock = stock;
     }
 
+    public void addStock(Integer quantity) {
+        if (quantity == null || quantity <= 0) throw new IllegalArgumentException("La cantidad debe ser positiva");
+        this.currentStock += quantity;
+    }
+
+    public void removeStock(Integer quantity) {
+        if (quantity == null || quantity <= 0) throw new IllegalArgumentException("La cantidad debe ser positiva");
+        if (this.currentStock < quantity) {
+            throw new BusinessException("Stock insuficiente: disponible " + this.currentStock + ", requerido " + quantity);
+        }
+        this.currentStock -= quantity;
+    }
+
     // Getters... (Sin setters para los campos críticos si no queremos permitir cambios)
 }

@@ -91,3 +91,57 @@ DELETE http://localhost:8080/api/products/1
 
 ### Desactivar producto ya desactivado (debe fallar 409)
 DELETE http://localhost:8080/api/products/1
+
+### ==========================================
+### STOCK MOVEMENT ENDPOINTS
+### ==========================================
+
+### Registrar ingreso de stock (IN)
+POST http://localhost:8080/api/stock-movements
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 20,
+  "type": "IN",
+  "reason": "Compra a proveedor"
+}
+
+### Registrar egreso de stock (OUT)
+POST http://localhost:8080/api/stock-movements
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 5,
+  "type": "OUT",
+  "reason": "Venta mostrador"
+}
+
+### Registrar ajuste de stock (ADJUSTMENT positivo)
+POST http://localhost:8080/api/stock-movements
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2,
+  "type": "ADJUSTMENT",
+  "reason": "Ajuste por inventario físico"
+}
+
+### Listar movimientos por producto (paginado)
+GET http://localhost:8080/api/stock-movements?productId=1&page=0&size=10
+
+### Listar página 2
+GET http://localhost:8080/api/stock-movements?productId=1&page=1&size=2
+
+### Registrar OUT sin stock suficiente (debe fallar 409)
+POST http://localhost:8080/api/stock-movements
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 9999,
+  "type": "OUT",
+  "reason": "Esto debería fallar"
+}
