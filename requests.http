@@ -201,3 +201,51 @@ Content-Type: application/json
   "name": "Otro Juan",
   "email": "juanperez@example.com"
 }
+
+### ==========================================
+### SALE ENDPOINTS
+### ==========================================
+
+### Crear venta con 2 items
+POST http://localhost:8080/api/sales
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    { "productId": 2, "quantity": 2, "unitPrice": 60.00 },
+    { "productId": 3, "quantity": 1, "unitPrice": 350.00 }
+  ],
+  "paymentMethod": "CASH",
+  "notes": "Venta mostrador"
+}
+
+### Listar todas las ventas
+GET http://localhost:8080/api/sales
+
+### Obtener venta ID 1
+GET http://localhost:8080/api/sales/1
+
+### Crear venta sin stock suficiente (debe fallar 409)
+POST http://localhost:8080/api/sales
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    { "productId": 2, "quantity": 9999, "unitPrice": 60.00 }
+  ],
+  "paymentMethod": "CASH"
+}
+
+### Crear venta con cliente desactivado (debe fallar 409)
+POST http://localhost:8080/api/sales
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "items": [
+    { "productId": 2, "quantity": 1, "unitPrice": 60.00 }
+  ],
+  "paymentMethod": "CASH"
+}
