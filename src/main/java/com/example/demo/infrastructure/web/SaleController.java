@@ -1,5 +1,6 @@
 package com.example.demo.infrastructure.web;
 
+import com.example.demo.application.port.in.CancelSalePort;
 import com.example.demo.application.port.in.CreateSalePort;
 import com.example.demo.application.port.in.GetSalePort;
 import com.example.demo.application.port.in.ListSalesPort;
@@ -18,13 +19,16 @@ public class SaleController {
     private final CreateSalePort createSalePort;
     private final GetSalePort getSalePort;
     private final ListSalesPort listSalesPort;
+    private final CancelSalePort cancelSalePort;
 
     public SaleController(CreateSalePort createSalePort,
                            GetSalePort getSalePort,
-                           ListSalesPort listSalesPort) {
+                           ListSalesPort listSalesPort,
+                           CancelSalePort cancelSalePort) {
         this.createSalePort = createSalePort;
         this.getSalePort = getSalePort;
         this.listSalesPort = listSalesPort;
+        this.cancelSalePort = cancelSalePort;
     }
 
     @PostMapping
@@ -41,5 +45,13 @@ public class SaleController {
     @GetMapping("/{id}")
     public ResponseEntity<Sale> getById(@PathVariable Long id) {
         return ResponseEntity.ok(getSalePort.execute(id));
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Sale> cancel(@PathVariable Long id,
+                                        @RequestBody(required = false) CancelSaleRequest request) {
+        String reason = request != null ? request.reason() : null;
+        Sale sale = cancelSalePort.execute(id, reason);
+        return ResponseEntity.ok(sale);
     }
 }

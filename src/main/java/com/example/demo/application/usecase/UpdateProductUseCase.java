@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.UpdateProductPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UpdateProductUseCase implements UpdateProductPort {
     @Override
     public Product execute(Long id, String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Producto no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
 
         // Validar SKU único (excluyendo el producto actual)
         if (!product.getSku().equals(sku)

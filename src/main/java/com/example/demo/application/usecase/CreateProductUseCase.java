@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.CreateProductPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
@@ -40,7 +41,7 @@ public class CreateProductUseCase implements CreateProductPort {
     private void validateCategoryActive(Long categoryId) {
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isEmpty()) {
-            throw new BusinessException("Categoría no encontrada: " + categoryId);
+            throw new NotFoundException("Categoría no encontrada: " + categoryId);
         }
         if (!category.get().isActive()) {
             throw new BusinessException("La categoría '" + category.get().getName() + "' está desactivada");

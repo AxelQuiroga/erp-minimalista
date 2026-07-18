@@ -33,4 +33,6 @@ public class SaleEntity {
     private String notes;
 
     private BigDecimal totalAmount;
+
+    private String cancellationReason;
 }

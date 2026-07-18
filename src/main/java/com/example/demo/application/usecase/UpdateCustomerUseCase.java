@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.UpdateCustomerPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Customer;
 import com.example.demo.domain.repository.CustomerRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class UpdateCustomerUseCase implements UpdateCustomerPort {
     @Override
     public Customer execute(Long id, String name, String email, String phone, String address) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Cliente no encontrado: " + id));
+                .orElseThrow(() -> new NotFoundException("Cliente no encontrado: " + id));
 
         // Validar email único si cambió
         if (!customer.getEmail().equals(email) && customerRepository.existsByEmail(email)) {

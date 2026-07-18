@@ -249,3 +249,33 @@ Content-Type: application/json
   ],
   "paymentMethod": "CASH"
 }
+
+### ==========================================
+### CANCEL SALE ENDPOINTS
+### ==========================================
+
+### Cancelar venta ID 1 con motivo
+PATCH http://localhost:8080/api/sales/1/cancel
+Content-Type: application/json
+
+{
+  "reason": "Cliente devolvi\u00f3 el producto - no le gust\u00f3 el color"
+}
+
+### Cancelar venta sin motivo (debe funcionar)
+PATCH http://localhost:8080/api/sales/2/cancel
+Content-Type: application/json
+
+{}
+
+### Cancelar venta ya cancelada (debe fallar 409)
+PATCH http://localhost:8080/api/sales/1/cancel
+Content-Type: application/json
+
+{}
+
+### Cancelar venta inexistente (debe fallar 404)
+PATCH http://localhost:8080/api/sales/999/cancel
+Content-Type: application/json
+
+{}

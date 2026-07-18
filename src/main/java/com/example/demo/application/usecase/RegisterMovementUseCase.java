@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.RegisterMovementPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.MovementType;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.model.StockMovement;
@@ -26,7 +27,7 @@ public class RegisterMovementUseCase implements RegisterMovementPort {
     @Override
     public StockMovement execute(Long productId, Integer quantity, MovementType type, String reason) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException("Producto no encontrado: " + productId));
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado: " + productId));
 
         if (!product.isActive()) {
             throw new BusinessException("No se puede registrar movimiento en un producto desactivado");

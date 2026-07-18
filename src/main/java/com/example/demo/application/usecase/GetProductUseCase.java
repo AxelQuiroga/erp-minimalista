@@ -1,7 +1,7 @@
 package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.GetProductPort;
-import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,6 @@ public class GetProductUseCase implements GetProductPort {
 
     public Product execute(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Producto no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
     }
 }

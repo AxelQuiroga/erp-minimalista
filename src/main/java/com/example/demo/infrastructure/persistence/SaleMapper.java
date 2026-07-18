@@ -2,6 +2,7 @@ package com.example.demo.infrastructure.persistence;
 
 import com.example.demo.domain.model.Sale;
 import com.example.demo.domain.model.SaleDetail;
+import com.example.demo.domain.model.SaleStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -14,10 +15,11 @@ public class SaleMapper {
         entity.setId(domain.getId());
         entity.setCustomerId(domain.getCustomerId());
         entity.setCreatedAt(domain.getCreatedAt());
-        entity.setStatus(domain.getStatus());
+        entity.setStatus(domain.getStatus() != null ? domain.getStatus().name() : null);
         entity.setPaymentMethod(domain.getPaymentMethod());
         entity.setNotes(domain.getNotes());
         entity.setTotalAmount(domain.getTotalAmount());
+        entity.setCancellationReason(domain.getCancellationReason());
 
         // Mapear items con la referencia bidireccional
         if (domain.getItems() != null) {
@@ -47,9 +49,10 @@ public class SaleMapper {
                         .map(this::toDetailDomain)
                         .collect(Collectors.toList()),
                 entity.getCreatedAt(),
-                entity.getStatus(),
+                entity.getStatus() != null ? SaleStatus.valueOf(entity.getStatus()) : null,
                 entity.getPaymentMethod(),
-                entity.getNotes()
+                entity.getNotes(),
+                entity.getCancellationReason()
         );
     }
 

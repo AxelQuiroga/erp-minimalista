@@ -1,7 +1,7 @@
 package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.GetCategoryPort;
-import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,6 @@ public class GetCategoryUseCase implements GetCategoryPort {
 
     public Category execute(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Categoría no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
     }
 }

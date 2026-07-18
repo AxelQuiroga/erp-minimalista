@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.DeactivateCategoryPort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.Category;
 import com.example.demo.domain.repository.CategoryRepositoryPort;
 import com.example.demo.domain.repository.ProductRepositoryPort;
@@ -23,7 +24,7 @@ public class DeactivateCategoryUseCase implements DeactivateCategoryPort {
 
     public Category execute(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Categoría no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
 
         if (productRepository.hasActiveProductsByCategory(id)) {
             throw new BusinessException("No se puede desactivar la categoría: tiene productos activos");

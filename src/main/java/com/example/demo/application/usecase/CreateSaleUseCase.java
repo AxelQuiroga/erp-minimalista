@@ -2,6 +2,7 @@ package com.example.demo.application.usecase;
 
 import com.example.demo.application.port.in.CreateSalePort;
 import com.example.demo.domain.exception.BusinessException;
+import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.*;
 import com.example.demo.domain.repository.CustomerRepositoryPort;
 import com.example.demo.domain.repository.ProductRepositoryPort;
@@ -37,7 +38,7 @@ public class CreateSaleUseCase implements CreateSalePort {
     public Sale execute(CreateSaleCommand command) {
         // 1. Validar cliente
         Customer customer = customerRepository.findById(command.customerId())
-                .orElseThrow(() -> new BusinessException("Cliente no encontrado: " + command.customerId()));
+                .orElseThrow(() -> new NotFoundException("Cliente no encontrado: " + command.customerId()));
         if (!customer.isActive()) {
             throw new BusinessException("El cliente '" + customer.getName() + "' está desactivado");
         }
@@ -48,7 +49,7 @@ public class CreateSaleUseCase implements CreateSalePort {
 
         for (CreateSalePort.SaleItemCommand item : command.items()) {
             Product product = productRepository.findById(item.productId())
-                    .orElseThrow(() -> new BusinessException("Producto no encontrado: " + item.productId()));
+                    .orElseThrow(() -> new NotFoundException("Producto no encontrado: " + item.productId()));
             if (!product.isActive()) {
                 throw new BusinessException("El producto '" + product.getName() + "' está desactivado");
             }
@@ -62,7 +63,7 @@ public class CreateSaleUseCase implements CreateSalePort {
 
         // 3. Crear y guardar la venta
         Sale sale = new Sale(null, command.customerId(), details, LocalDateTime.now(),
-                "COMPLETED", command.paymentMethod(), command.notes());
+                SaleStatus.COMPLETED, command.paymentMethod(), command.notes(), null);
         Sale savedSale = saleRepository.save(sale);
 
         // 4. Persistir cambios de stock
