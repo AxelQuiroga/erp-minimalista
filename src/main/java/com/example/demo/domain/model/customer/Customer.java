@@ -64,6 +64,12 @@ public class Customer {
         this.active = false;
     }
 
+    public void activate() {
+    if (this.active) {
+        throw new BusinessException("El cliente ya está activo");
+    }
+    this.active = true;
+}
     // Getters
     public Long getId() { return id; }
     public String getName() { return name; }

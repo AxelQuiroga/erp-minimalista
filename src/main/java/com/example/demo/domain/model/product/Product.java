@@ -78,6 +78,13 @@ public class Product {
         }
         this.active = false;
     }
+
+    public void activate() {
+        if (this.active) {
+            throw new BusinessException("El producto ya está activo");
+        }
+        this.active = true;
+    }
     public void rename(String name) {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio");
         this.name = name;

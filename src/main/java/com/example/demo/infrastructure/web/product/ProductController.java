@@ -1,5 +1,6 @@
 package com.example.demo.infrastructure.web.product;
 
+import com.example.demo.application.port.in.product.ActivateProductPort;
 import com.example.demo.application.port.in.product.CreateProductPort;
 import com.example.demo.application.port.in.product.DeactivateProductPort;
 import com.example.demo.application.port.in.product.GetProductPort;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -22,17 +24,21 @@ public class ProductController {
     private final ListProductsPort listProductsPort;
     private final UpdateProductPort updateProductPort;
     private final DeactivateProductPort deactivateProductPort;
+    private final ActivateProductPort activateProductPort;
+
 
     public ProductController(CreateProductPort createProductPort,
                              GetProductPort getProductPort,
                              ListProductsPort listProductsPort,
                              UpdateProductPort updateProductPort,
-                             DeactivateProductPort deactivateProductPort) {
+                             DeactivateProductPort deactivateProductPort,
+                             ActivateProductPort activateProductPort) {
         this.createProductPort = createProductPort;
         this.getProductPort = getProductPort;
         this.listProductsPort = listProductsPort;
         this.updateProductPort = updateProductPort;
         this.deactivateProductPort = deactivateProductPort;
+        this.activateProductPort = activateProductPort;
     }
 
     @PostMapping
@@ -67,4 +73,16 @@ public class ProductController {
         deactivateProductPort.execute(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/status")
+public ResponseEntity<Product> updateStatus(@PathVariable Long id,
+                                            @RequestBody Map<String, Boolean> body) {
+    if (Boolean.TRUE.equals(body.get("active"))) {
+        return ResponseEntity.ok(activateProductPort.execute(id));
+    } else {
+        deactivateProductPort.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+    
 }
