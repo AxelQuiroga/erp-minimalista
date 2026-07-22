@@ -1,5 +1,6 @@
 package com.example.demo.infrastructure.persistence.customer;
 
+import com.example.demo.application.port.in.customer.CustomerFilter;
 import com.example.demo.domain.model.customer.Customer;
 import com.example.demo.application.port.out.customer.CustomerRepositoryPort;
 import org.springframework.stereotype.Component;
@@ -41,5 +42,17 @@ public class CustomerRepositoryAdapter implements CustomerRepositoryPort {
         return repository.findAll().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Customer> findByFilter(CustomerFilter filter) {
+        return repository.findByFilter(filter.q(), filter.active()).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long count() {
+        return repository.count();
     }
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ListProductsPort {
     List<Product> execute();
+    List<Product> execute(ProductFilter filter);
 }

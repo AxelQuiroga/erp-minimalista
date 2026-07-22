@@ -4,12 +4,14 @@ import com.example.demo.application.port.in.sale.CancelSalePort;
 import com.example.demo.application.port.in.sale.CreateSalePort;
 import com.example.demo.application.port.in.sale.GetSalePort;
 import com.example.demo.application.port.in.sale.ListSalesPort;
+import com.example.demo.application.port.in.sale.SaleFilter;
 import com.example.demo.domain.model.sale.Sale;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,8 +40,14 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Sale>> getAll() {
-        return ResponseEntity.ok(listSalesPort.execute());
+    public ResponseEntity<List<Sale>> getAll(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to) {
+        if (status == null && from == null && to == null) {
+            return ResponseEntity.ok(listSalesPort.execute());
+        }
+        return ResponseEntity.ok(listSalesPort.execute(new SaleFilter(status, from, to)));
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,7 @@ import com.example.demo.application.port.in.customer.ActivateCustomerPort;
 import com.example.demo.application.port.in.customer.CreateCustomerPort;
 import com.example.demo.application.port.in.customer.DeactivateCustomerPort;
 import com.example.demo.application.port.in.customer.GetCustomerPort;
+import com.example.demo.application.port.in.customer.CustomerFilter;
 import com.example.demo.application.port.in.customer.ListCustomersPort;
 import com.example.demo.application.port.in.customer.UpdateCustomerPort;
 import com.example.demo.domain.model.customer.Customer;
@@ -48,8 +49,13 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAll() {
-        return ResponseEntity.ok(listCustomersPort.execute());
+    public ResponseEntity<List<Customer>> getAll(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Boolean active) {
+        if (q == null && active == null) {
+            return ResponseEntity.ok(listCustomersPort.execute());
+        }
+        return ResponseEntity.ok(listCustomersPort.execute(new CustomerFilter(q, active)));
     }
 
     @GetMapping("/{id}")

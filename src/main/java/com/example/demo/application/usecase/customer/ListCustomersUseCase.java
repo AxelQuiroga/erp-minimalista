@@ -1,5 +1,6 @@
 package com.example.demo.application.usecase.customer;
 
+import com.example.demo.application.port.in.customer.CustomerFilter;
 import com.example.demo.application.port.in.customer.ListCustomersPort;
 import com.example.demo.domain.model.customer.Customer;
 import com.example.demo.application.port.out.customer.CustomerRepositoryPort;
@@ -19,5 +20,10 @@ public class ListCustomersUseCase implements ListCustomersPort {
     @Override
     public List<Customer> execute() {
         return customerRepository.findAll();
+    }
+
+    @Override
+    public List<Customer> execute(CustomerFilter filter) {
+        return customerRepository.findByFilter(filter);
     }
 }

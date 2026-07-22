@@ -5,6 +5,7 @@ import com.example.demo.application.port.in.product.CreateProductPort;
 import com.example.demo.application.port.in.product.DeactivateProductPort;
 import com.example.demo.application.port.in.product.GetProductPort;
 import com.example.demo.application.port.in.product.ListProductsPort;
+import com.example.demo.application.port.in.product.ProductFilter;
 import com.example.demo.application.port.in.product.UpdateProductPort;
 import com.example.demo.domain.model.product.Product;
 import jakarta.validation.Valid;
@@ -49,8 +50,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        return ResponseEntity.ok(listProductsPort.execute());
+    public ResponseEntity<List<Product>> getAll(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer minStock,
+            @RequestParam(required = false) Boolean active) {
+        if (q == null && minStock == null && active == null) {
+            return ResponseEntity.ok(listProductsPort.execute());
+        }
+        return ResponseEntity.ok(listProductsPort.execute(new ProductFilter(q, minStock, active)));
     }
 
     @GetMapping("/{id}")

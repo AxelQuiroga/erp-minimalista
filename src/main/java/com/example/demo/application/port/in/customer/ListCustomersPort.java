@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ListCustomersPort {
     List<Customer> execute();
+    List<Customer> execute(CustomerFilter filter);
 }
