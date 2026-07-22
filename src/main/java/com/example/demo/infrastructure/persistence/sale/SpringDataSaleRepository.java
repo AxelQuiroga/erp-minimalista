@@ -3,9 +3,9 @@ package com.example.demo.infrastructure.persistence.sale;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHint;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
+import jakarta.persistence.QueryHint;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public interface SpringDataSaleRepository extends JpaRepository<SaleEntity, Long
            "(:from IS NULL OR s.createdAt >= :from) AND " +
            "(:toEnd IS NULL OR s.createdAt < :toEnd) " +
            "ORDER BY s.createdAt DESC")
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH, value = "false"))
+    @QueryHints(@QueryHint(name = "hibernate.query.passDistinctThrough", value = "false"))
     List<SaleEntity> findByFilter(@Param("status") String status,
                                   @Param("from") LocalDateTime from,
                                   @Param("toEnd") LocalDateTime toEnd);
@@ -37,6 +37,6 @@ public interface SpringDataSaleRepository extends JpaRepository<SaleEntity, Long
     Optional<SaleEntity> findByIdWithItems(@Param("id") Long id);
 
     @Query("SELECT DISTINCT s FROM SaleEntity s LEFT JOIN FETCH s.items ORDER BY s.createdAt DESC")
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH, value = "false"))
+    @QueryHints(@QueryHint(name = "hibernate.query.passDistinctThrough", value = "false"))
     List<SaleEntity> findAllWithItems();
 }
