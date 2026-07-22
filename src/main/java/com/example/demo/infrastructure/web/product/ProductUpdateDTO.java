@@ -34,5 +34,6 @@ public class ProductUpdateDTO {
     @Min(value = 0, message = "El stock no puede ser negativo")
     private Integer currentStock;
 
-
+    @NotNull(message = "El estado es obligatorio")
+    private Boolean active;
     }

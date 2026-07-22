@@ -21,7 +21,7 @@ public class UpdateProductUseCase implements UpdateProductPort {
     }
 
     @Override
-    public Product execute(Long id, String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock) {
+    public Product execute(Long id, String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock, boolean active) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
 
@@ -36,6 +36,12 @@ public class UpdateProductUseCase implements UpdateProductPort {
         product.changeSku(sku);
         product.updatePrice(costPrice, salePrice);
         product.updateStock(currentStock);
+
+        if (active && !product.isActive()) {
+            product.activate();
+        } else if (!active && product.isActive()) {
+            product.deactivate();
+        }
 
         return productRepository.save(product);
     }

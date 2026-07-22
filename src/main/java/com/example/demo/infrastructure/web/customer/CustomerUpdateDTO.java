@@ -2,6 +2,7 @@ package com.example.demo.infrastructure.web.customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record CustomerUpdateDTO(
         @NotBlank(message = "El nombre es obligatorio") String name,
@@ -11,5 +12,7 @@ public record CustomerUpdateDTO(
         String email,
 
         String phone,
-        String address
+        String address,
+
+        @NotNull(message = "El estado es obligatorio") Boolean active
 ) {}

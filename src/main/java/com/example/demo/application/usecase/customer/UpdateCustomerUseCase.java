@@ -19,7 +19,7 @@ public class UpdateCustomerUseCase implements UpdateCustomerPort {
     }
 
     @Override
-    public Customer execute(Long id, String name, String email, String phone, String address) {
+    public Customer execute(Long id, String name, String email, String phone, String address, boolean active) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cliente no encontrado: " + id));
 
@@ -32,6 +32,12 @@ public class UpdateCustomerUseCase implements UpdateCustomerPort {
         customer.changeEmail(email);
         customer.changePhone(phone);
         customer.changeAddress(address);
+
+        if (active && !customer.isActive()) {
+            customer.activate();
+        } else if (!active && customer.isActive()) {
+            customer.deactivate();
+        }
 
         return customerRepository.save(customer);
     }

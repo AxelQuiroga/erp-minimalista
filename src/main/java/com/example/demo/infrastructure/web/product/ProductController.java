@@ -60,10 +60,10 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable Long id,
-                                          @Valid @RequestBody ProductUpdateDTO dto) {
+                                           @Valid @RequestBody ProductUpdateDTO dto) {
         Product updated = updateProductPort.execute(
                 id, dto.getName(), dto.getSku(), dto.getCostPrice(),
-                dto.getSalePrice(), dto.getCurrentStock()
+                dto.getSalePrice(), dto.getCurrentStock(), dto.getActive()
         );
         return ResponseEntity.ok(updated);
     }

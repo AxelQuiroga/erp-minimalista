@@ -60,7 +60,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<Customer> update(@PathVariable Long id,
                                            @Valid @RequestBody CustomerUpdateDTO dto) {
-        Customer updated = updateCustomerPort.execute(id, dto.name(), dto.email(), dto.phone(), dto.address());
+        Customer updated = updateCustomerPort.execute(id, dto.name(), dto.email(), dto.phone(), dto.address(), dto.active());
         return ResponseEntity.ok(updated);
     }
 
