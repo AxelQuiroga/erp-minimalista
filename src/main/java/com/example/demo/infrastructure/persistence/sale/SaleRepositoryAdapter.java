@@ -32,12 +32,12 @@ public class SaleRepositoryAdapter implements SaleRepositoryPort {
 
     @Override
     public Optional<Sale> findById(Long id) {
-        return repository.findById(id).map(mapper::toDomain);
+        return repository.findByIdWithItems(id).map(mapper::toDomain);
     }
 
     @Override
     public List<Sale> findAll() {
-        return repository.findAll().stream()
+        return repository.findAllWithItems().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -45,7 +45,7 @@ public class SaleRepositoryAdapter implements SaleRepositoryPort {
     @Override
     public List<Sale> findByFilter(SaleFilter filter) {
         LocalDateTime from = filter.from() != null ? filter.from().atStartOfDay() : null;
-        LocalDateTime to = filter.to() != null ? filter.to().atTime(23, 59, 59) : null;
+        LocalDateTime to = filter.to() != null ? filter.to().plusDays(1).atStartOfDay() : null;
         return repository.findByFilter(filter.status(), from, to).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());

@@ -3,6 +3,7 @@ package com.example.demo.infrastructure.persistence.sale;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class SaleEntity {
     private Long customerId;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 20)
     private List<SaleDetailEntity> items;
 
     @CreationTimestamp

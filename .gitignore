@@ -41,6 +41,9 @@ out/
 *.err
 bootrun*
 
+### Agent skills ###
+.atl/
+
 ### Secrets ###
 application-local.properties
 application-dev.properties

@@ -5,10 +5,12 @@ import com.example.demo.application.port.in.sale.SaleFilter;
 import com.example.demo.domain.model.sale.Sale;
 import com.example.demo.application.port.out.sale.SaleRepositoryPort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ListSalesUseCase implements ListSalesPort {
 
     private final SaleRepositoryPort saleRepository;

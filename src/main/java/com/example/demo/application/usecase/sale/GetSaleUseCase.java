@@ -5,8 +5,10 @@ import com.example.demo.domain.exception.NotFoundException;
 import com.example.demo.domain.model.sale.Sale;
 import com.example.demo.application.port.out.sale.SaleRepositoryPort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class GetSaleUseCase implements GetSalePort {
 
     private final SaleRepositoryPort saleRepository;
