@@ -16,8 +16,8 @@ public interface SpringDataSaleRepository extends JpaRepository<SaleEntity, Long
 
     @Query("SELECT DISTINCT s FROM SaleEntity s LEFT JOIN FETCH s.items WHERE " +
            "(:status IS NULL OR s.status = :status) AND " +
-           "(:from IS NULL OR s.createdAt >= :from) AND " +
-           "(:toEnd IS NULL OR s.createdAt < :toEnd) " +
+           "s.createdAt >= :from AND " +
+           "s.createdAt < :toEnd " +
            "ORDER BY s.createdAt DESC")
     @QueryHints(@QueryHint(name = "hibernate.query.passDistinctThrough", value = "false"))
     List<SaleEntity> findByFilter(@Param("status") String status,

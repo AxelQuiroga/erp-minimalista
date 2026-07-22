@@ -44,8 +44,14 @@ public class SaleRepositoryAdapter implements SaleRepositoryPort {
 
     @Override
     public List<Sale> findByFilter(SaleFilter filter) {
-        LocalDateTime from = filter.from() != null ? filter.from().atStartOfDay() : null;
-        LocalDateTime to = filter.to() != null ? filter.to().plusDays(1).atStartOfDay() : null;
+        // Usar fechas extremas cuando no hay filtro, para evitar bug de Hibernate 6.x
+        // con el patrón (:param IS NULL OR columna = :param) cuando :param es null
+        LocalDateTime from = filter.from() != null
+                ? filter.from().atStartOfDay()
+                : LocalDateTime.of(1970, 1, 1, 0, 0);
+        LocalDateTime to = filter.to() != null
+                ? filter.to().plusDays(1).atStartOfDay()
+                : LocalDateTime.of(9999, 12, 31, 23, 59, 59);
         return repository.findByFilter(filter.status(), from, to).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
