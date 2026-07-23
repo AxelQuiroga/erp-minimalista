@@ -13,6 +13,7 @@ public class Product {
     private BigDecimal salePrice;
     private Integer currentStock;
     private boolean active;
+    private String categoryName;
     // CONSTRUCTOR: El guardián de la integridad
     public Product(Long id, Long categoryId  ,String name, String sku, BigDecimal costPrice, BigDecimal salePrice, Integer currentStock, boolean active) {
         validate(name, sku, costPrice, salePrice, currentStock, categoryId);
@@ -44,6 +45,8 @@ public class Product {
         this.salePrice = newPrice;
     }
 
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
     public Long getId() {
         return id;
     }
